@@ -2,12 +2,14 @@
 
 
 To test:
-    cd /tmp/
-    wget https://raw.github.com/ghowlowl/ghowly/master/init.sh
-    . init.sh
-    # init.sh should do the rest and create a python virtual env
-    # in your homedir  ~/gautam.*/
-    # I wrote this on Mac OS X, bash and python 2.7...
+
+    - cd /tmp/
+    - wget https://raw.github.com/ghowlowl/ghowly/master/init.sh
+    - . init.sh
+      # init.sh should do the rest and create a python virtual env
+      # in your homedir  ~/gautam.*/
+      # I wrote this on Mac OS X, bash and python 2.7...
+
 
 Let me explain first.
 
@@ -65,5 +67,5 @@ Let me explain first.
        go to loadbalancer.ip.amazon/blog/ it will launch wordpress blog
        so we are all good.
 
-- I know it could be lot simpler by just doing everything with cloudformation, but I used at bare minimum. I started off using everything with ansible, then used aws cli where it was not possible. Creating private VPC was complicated with too many resources so I used cloudformation.
+I know it could be a lot simpler by just doing everything with cloudformation, but I used that at minimum. I started off using trying everything with ansible, then used aws cli where it was not possible. And realised creating private VPC was complicated with too many resources so I ended up using cloudformation. Anyways learnt a great deal!!
 
