@@ -121,7 +121,7 @@ clear
 green "Install OS and stuff"
 read -p "Press key  to continue... " -n1 -s
 
-ansible-playbook -vvv -i inventory/ecs.py site.xml
+ansible-playbook -vvv site.xml
 
 
 ##
@@ -129,7 +129,7 @@ clear
 green "Install app and db"
 read -p "Press key  to continue... " -n1 -s
 
-ansible-playbook -vvv -i inventory/ecs.py app.xml
+ansible-playbook -vvv app.xml
 
 clear
 green "All done, test using loadbalancer/inctance ip"
