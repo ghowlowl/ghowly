@@ -380,7 +380,7 @@ try:
             vars['igw_id'] = res_id
 
         if re.match('rtb-.*', res_id):
-            vars['routetbl_id'] = res_id
+            vars['rtb_id'] = res_id
 
         if re.match('subnet-.*', res_id):
             vars['subnet_id'] = res_id
@@ -390,9 +390,32 @@ try:
 except Exception, e:
     print "Stack data parsing failed", e
 
+
+###############################################################################
+# associate rtb to subnet
+###############################################################################
+
+
+mypage(
+    headline="Associate route tables",
+    msg="""Associating route table to the subnet ensures EC2 instances can
+    talk to internet gateway. Otherwise connection to internet fails from
+    instances! To see these settings..
+        - Go to VPC aws console
+        - Click subnets and select the correct VPC subnet
+        - Ensure routes 0.0.0.0/0 targets the gateway""")
+
+route_associate = Command(
+    """aws ec2 associate-route-table --subnet-id {} --route-table-id {} --region {}""".format(
+        vars['subnet_id'],
+        vars['rtb_id'],
+        vars['region']))
+_, route_out = route_associate.run()
+
 ###############################################################################
 # sg
 ###############################################################################
+
 
 sg_fetch = Command(
     """aws ec2 describe-security-groups --output text --region {} | grep {} | awk '{{print $NF}}'""".format(region, vars['vpc_id'])
