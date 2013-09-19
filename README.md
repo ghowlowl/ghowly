@@ -1,8 +1,10 @@
 
+A 2 webserver (behind ELB) + 1 db wordpress setup, all in private VPC
+================================================================
 
 
 To test:
-
+--------------------
     - cd /tmp/
     - wget https://raw.github.com/ghowlowl/ghowly/master/init.sh
     - . init.sh
@@ -12,6 +14,7 @@ To test:
 
 
 Let me explain first.
+--------------------
 
     1. I have used aws-cli, ansible & cloudformation. The playbooks are
        designed to be flexible to create dev|prod|stage env in their own VPC
@@ -67,5 +70,7 @@ Let me explain first.
        go to loadbalancer.ip.amazon/blog/ it will launch wordpress blog
        so we are all good.
 
+Conclusion
+--------------------
 I know it could be a lot simpler by just doing everything with cloudformation, but I used that at minimum. I started off using trying everything with ansible, then used aws cli where it was not possible. And realised creating private VPC was complicated with too many resources so I ended up using cloudformation. Anyways learnt a great deal!!
 
