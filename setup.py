@@ -15,8 +15,8 @@ test = None
 if test:
     env = "dev"
     region = "us-west-1"
-    access_key = "AKIAJRX3QJDEN75JTCTA"
-    secret_key = "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"
+    access_key = "cc"
+    secret_key = "cc/cc+cc"
     dbname = "owly"
     dbuser = "owly"
     dbpass = "owly"
