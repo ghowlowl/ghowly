@@ -12,7 +12,6 @@
             "Type": "AWS::EC2::Subnet",
             "Properties": {
                 "CidrBlock": "10.10.10.0/24",
-                "AvailabilityZone": "us-west-1a",
                 "VpcId": {
                     "Ref": "myvpc"
                 }
@@ -25,7 +24,6 @@
         "mydhcpopt": {
             "Type": "AWS::EC2::DHCPOptions",
             "Properties": {
-                "DomainName": "us-west-1.compute.internal",
                 "DomainNameServers": [
                     "AmazonProvidedDNS"
                 ]
