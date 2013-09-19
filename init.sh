@@ -6,7 +6,7 @@
 #Change these variable to where all files will go
 #default install is under your homedir ~/gautam.92409234 etc
 HOOT_NEST=~/gautam.$(date +%s)
-HOOT_EGG_URL=https://github.com/ghowlowl/ghowly/archive/2.tar.gz
+HOOT_EGG_URL=https://github.com/ghowlowl/ghowly/archive/3.tar.gz
 
 #Changes these to your own credentials
 AWS_ACCESS_KEY_ID=ccc
