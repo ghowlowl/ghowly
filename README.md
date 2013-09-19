@@ -1,7 +1,7 @@
 
-A 2 webserver (behind ELB) + 1 db wordpress setup, all in private VPC
+LAMP on multi EC2 instance inside VPC
 ================================================================
-
+#### Uses 2 instances as webservers and 1 instance as database. The webservers are loadbalanced by an ELB instance. The webserver, database hosts are in there own security group - allowing greater control over security. The hosts have 64bit Ubuntu precise and Apache2 and MySQL. Go have fun!
 
 To test:
 --------------------
