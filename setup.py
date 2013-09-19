@@ -343,8 +343,7 @@ mypage(
     Using cloudformation template {}
     """.format(ansible_dir + '/setup/cloudformation.template.json'))
 
-stack_name = "ass123"
-#stack_name = "tmp" + session_id
+stack_name = "stack" + session_id
 
 # '''
 stack_create_cmd = 'aws cloudformation create-stack --stack-name {} --template-body file://setup/cloudformation.template.json --region {} --output text'.format(stack_name, region)
