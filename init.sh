@@ -48,7 +48,7 @@ cd $HOOT_NEST && . bin/activate
     mkdir $HOOT_NEST/ansible
     cd $HOOT_NEST/ansible
     wget $HOOT_EGG_URL
-    unzip owl_egg.zip
+    tar -zxvf *.tar.gz
 )
 
 #create a setup_env file should be souced for ansible stuff
