@@ -45,10 +45,12 @@ cd $HOOT_NEST && . bin/activate
 
 #download playbooks
 (
-    mkdir $HOOT_NEST/ansible
-    cd $HOOT_NEST/ansible
+
+    cd $HOOT_NEST/tmp
     wget $HOOT_EGG_URL
     tar -zxvf *.tar.gz
+    mv ghowly* ../ansible
+    cd ../ansible
 )
 
 #create a setup_env file should be souced for ansible stuff
