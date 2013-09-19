@@ -1,0 +1,20 @@
+---
+#tasks
+
+- apt: pkg={{item}} state=present update_cache=yes install_recommends=yes
+  sudo: yes
+  with_items:
+    - mysql-client
+    - apache2
+    - apache2-utils
+    - libapache2-mod-php5
+    - php5-curl
+    - php5-cli
+    - php5-cgi
+    - php5-gmp
+    - php5-gd
+    - php5-mcrypt
+    - php5-memcached
+    - php5-mysql
+    - python-mysqldb
+  notify: restart apache

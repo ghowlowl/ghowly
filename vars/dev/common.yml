@@ -1,0 +1,11 @@
+---
+env: dev
+ec2:
+  keypair: "ass123kp"
+  image_id: "ami-fe002cbb"
+  instance_type: "t1.micro"
+  vpc_id: "vpc-3cbc9554"
+  subnet_id: "subnet-1cbc9574"
+  securitygroup_id: "sg-af2fcdc0
+"
+  region: "us-west-1"

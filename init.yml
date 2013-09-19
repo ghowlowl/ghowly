@@ -1,0 +1,50 @@
+---
+
+- name: Create few ec2 instances
+  hosts: localhost
+  gather_facts: False
+
+  vars_prompt:
+    - name: "host_env"
+      prompt: "What env does it belong to? (dev|stage|prod) "
+      default: "dev"
+      private: no
+
+    - name: "host_count"
+      prompt: "How many EC2 hosts should I create? (1-100) "
+      default: 2
+      private: no
+
+    - name: "host_role"
+      prompt: "Whats the role? (web|db|app|misc) "
+      default: "web"
+      private: no
+
+  vars_files:
+      #source vars/common
+    - "./vars/common.yml"
+      #source vars/{dev,stage,prod}/common vars
+    - [ "./vars/{{ host_env }}/common.yml",
+        "./vars/misc/common.yml" ]
+        #source {dev,stage,prod}/{db,web}/common vars
+    - [ "./vars/{{ host_env }}/roles/{{ host_role }}/common.yml",
+        "./vars/{{ host_env }}/roles/misc/common.yml" ]
+
+  tasks:
+    - name: pre-flight check
+      local_action: shell echo Going to create ec2 env={{ host_env }} type={{ host_env }} role={{host_role}}
+
+      #creates secruity group for the role
+    - include: tasks/ec2_sg.yml role={{host_role}}
+
+      #creates ec2 instance
+    - include: tasks/ec2.yml count={{host_count}} role={{host_role}} env={{host_env}}
+
+    - name: post-task cache refresh
+      local_action: shell ./inventory/ec2.py --refresh-cache
+
+
+
+
+
+

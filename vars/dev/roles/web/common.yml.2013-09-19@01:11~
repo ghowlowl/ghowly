@@ -1,0 +1,22 @@
+---
+
+role: "web"
+data:
+  #will be changed
+  dbhost: 10.20.30.40
+
+  #mysql root pass
+  mysql:
+    pass: "t00t00t"
+
+  #mysql account/databse for application
+  myapp:
+    db:
+      host: "owly.db"
+      name: "owly"
+      user: "owly"
+      pass: "owly"
+
+    #web
+    web:
+      name: "owly"

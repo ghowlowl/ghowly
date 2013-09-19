@@ -1,0 +1,59 @@
+---
+# This playbook deploys the AWX application (database, web and worker) to a
+# single server.
+
+#- hosts: all
+#  tasks:
+#    - name: fetch host role types
+#      group_by: key={{ ansible_local['system']['host']['role'] }}
+
+
+- hosts: tag_*_db
+  user: ubuntu
+  vars_files:
+      #source vars/common
+    - "./vars/common.yml"
+
+      #source vars/{dev,stage,prod}/common vars
+    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/common.yml", "./vars/misc/common.yml" ]
+
+      #source {dev,stage,prod}/{db,web}/common vars
+    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/roles/{{ ansible_local['system']['host']['role'] }}/common.yml", "./vars/{{ ansible_local['system']['host']['env'] }}/roles/misc/common.yml" ]
+  roles:
+    - { role: dbapp,
+        name: "{{ data['myapp']['db']['name'] }}",
+        user: "{{ data['myapp']['db']['user'] }}",
+        pass: "{{ data['myapp']['db']['pass'] }}",
+      }
+      # - { role: misc, env={{ ansible_local['system']['host']['env'] }}, role={{ ansible_local['system']['host']['role'] }}}
+  tasks:
+    - name: Add db ip to vars/*/roles/db/common.yml
+      local_action: |
+          lineinfile dest=./vars/{{ ansible_local['system']['host']['env'] }}/roles/{{ ansible_local['system']['host']['role'] }}/common.yml regexp='^(.*) dbhost: (.*)$' line='\1 dbhost: {{ ansible_default_ipv4['address'] }}' backrefs=yes backup=yes
+    - name: Add db ip to vars/*/roles/db/common.yml
+      local_action: |
+          lineinfile dest=./vars/{{ ansible_local['system']['host']['env'] }}/roles/web/common.yml regexp='^(.*) dbhost: (.*)$' line='\1 dbhost: {{ ansible_default_ipv4['address'] }}' backrefs=yes backup=yes
+
+- hosts: tag_*_web
+  user: ubuntu
+  vars_files:
+      #source vars/common
+    - "./vars/common.yml"
+
+      #source vars/{dev,stage,prod}/common vars
+    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/common.yml", "./vars/misc/common.yml" ]
+
+      #source {dev,stage,prod}/{db,web}/common vars
+    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/roles/{{ ansible_local['system']['host']['role'] }}/common.yml", "./vars/{{ ansible_local['system']['host']['env'] }}/roles/misc/common.yml" ]
+  roles:
+    - { role: webapp,
+        name: "{{ data['myapp']['db']['name'] }}",
+        user: "{{ data['myapp']['db']['user'] }}",
+        pass: "{{ data['myapp']['db']['pass'] }}",
+        host: "{{ data['myapp']['db']['host'] }}",
+        dbhost: "{{ data['dbhost'] }}",
+        apppkg: "{{ data['myapp']['web']['pkgurl'] }}"
+      }
+      # - { role: misc, env={{ ansible_local['system']['host']['env'] }}, role={{ ansible_local['system']['host']['role'] }}}
+
+

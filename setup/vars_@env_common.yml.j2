@@ -1,0 +1,10 @@
+---
+env: {{ env }}
+ec2:
+  keypair: "{{ keypair }}"
+  image_id: "{{ ami_id }}"
+  instance_type: "t1.micro"
+  vpc_id: "{{ vpc_id }}"
+  subnet_id: "{{ subnet_id }}"
+  securitygroup_id: "{{ sg_id }}"
+  region: "{{ region }}"

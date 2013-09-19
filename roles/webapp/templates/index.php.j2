@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Hello Owl</title>
+    </head>
+    <body>
+        <h1>Hello Owl</h1>
+        <p>
+            Ansible installed a wordpress blog <a href='/blog/'>here</a>! Yay!
+            <br>
+            And if you like to see php <a href='/info.php'>info page</a> too.
+        </p>
+        <p>
+            Request fullfilled by: <strong> <?
+            $curl_handle=curl_init();
+curl_setopt($curl_handle,CURLOPT_CONNECTTIMEOUT,2);
+// The next line returns the response as the return value of the curl_exec command.
+curl_setopt($curl_handle,CURLOPT_RETURNTRANSFER,1);
+curl_setopt($curl_handle,CURLOPT_URL,'http://169.254.169.254/latest/meta-data/instance-id');
+
+$instanceId = curl_exec($curl_handle);
+
+echo $instanceId;
+?> </strong>
+    </body>
+</html>

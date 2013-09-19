@@ -1,0 +1,19 @@
+---
+
+
+- name: "Create elb instance"
+  local_action: shell
+                role_group_id=$( aws ec2 describe-security-groups
+                        --region {{ ec2['region'] }}
+                        --filters Name=vpc-id,Values={{ ec2['vpc_id'] }}
+                        --output text |
+                        grep {{ ec2['vpc_id'] }} |
+                        awk '$(NF-3)=="{{ role }}-lb" {print $NF}' );
+                default_group_id=$( aws ec2 describe-security-groups
+                        --region {{ ec2['region'] }}
+                        --filters Name=vpc-id,Values={{ ec2['vpc_id'] }}
+                        --output text |
+                        grep {{ ec2['vpc_id'] }} |
+                        awk '$(NF-3)=="default" {print $NF}' );
+                aws elb create-load-balancer --load-balancer-name {{ name }} --listeners Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=80 --subnets {{ ec2['subnet_id'] }} --security-groups $role_group_id $default_group_id --region {{ ec2['region'] }}
+  when: role == "web"

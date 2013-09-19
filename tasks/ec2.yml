@@ -1,0 +1,75 @@
+---
+
+
+
+- name: "Create ec2 instance"
+  local_action:
+    module:         ec2
+    region:         "{{ ec2['region'] }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    keypair:        "{{ ec2['keypair'] }}"
+    instance_type:  "{{ ec2['instance_type'] }}"
+    vpc_subnet_id:  "{{ ec2['subnet_id'] }}"
+    image:          "{{ ec2['image_id'] }}"
+    wait:           yes
+    wait_timeout:   500
+    count:          "{{ count }}"
+    instance_tags: '{ "role": "{{ role }}", "env": "{{ env }}" }'
+
+    #user data is run when instance is started
+    #user data should begun with #!
+    #this adds few facts in to facts.d
+    user_data: |
+               #!/bin/bash
+               fdir=/etc/ansible/facts.d
+               mkdir -p $fdir 2>/dev/null
+               echo [host] > $fdir/system.fact
+               echo role={{ role }} >> $fdir/system.fact
+               echo env={{ env }} >> $fdir/system.fact
+  register: ec2var
+
+
+# since instances in a VPC get pvt IPs we need
+# some way to connect to them
+# So either have a jump off box and set up ssh proxy (good)
+# or ass elastic ips (bad)
+- name: "Allocating & attaching EIP for the instance"
+  local_action: >
+        shell allocation_id=$(aws ec2 allocate-address --domain vpc --output text --region {{ ec2['region'] }} | awk '{print $NF}');
+        aws ec2 associate-address  --instance-id {{ item.id }} --allocation-id $allocation_id  --output text --region {{ ec2['region'] }}
+  with_items: ec2var.instances
+
+
+- name: "Add instance to security group"
+  local_action: shell
+                role_group_id=$( aws ec2 describe-security-groups
+                        --region {{ ec2['region'] }}
+                        --filters Name=vpc-id,Values={{ ec2['vpc_id'] }}
+                        --output text |
+                        grep {{ ec2['vpc_id'] }} |
+                        awk '$(NF-3)=="{{ role }}-hosts" {print $NF}' );
+                default_group_id=$( aws ec2 describe-security-groups
+                        --region {{ ec2['region'] }}
+                        --filters Name=vpc-id,Values={{ ec2['vpc_id'] }}
+                        --output text |
+                        grep {{ ec2['vpc_id'] }} |
+                        awk '$(NF-3)=="default" {print $NF}' );
+                aws ec2 modify-instance-attribute --instance-id {{ item.id }} --groups $default_group_id $role_group_id --region {{ ec2['region'] }}
+  with_items: ec2var.instances
+
+- include: elb.yml name="{{host_role}}-lb" role={{ host_role }}
+  when: host_role == "web"
+
+- name: "Add ec2 instance to elb"
+  local_action:
+    module: ec2_elb
+    instance_id: "{{ item.id }}"
+    region: "{{ ec2['region'] }}"
+    ec2_elbs:
+      - "{{ host_role }}-lb"
+    state: "present"
+    wait: no
+  with_items: ec2var.instances
+  when: host_role == "web"
+

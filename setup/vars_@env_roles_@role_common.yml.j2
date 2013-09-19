@@ -1,0 +1,22 @@
+---
+role: "db"
+data:
+  #will be changed
+  dbhost: 10.10.10.249
+
+  #mysql root pass
+  mysql:
+    pass: "t00t00t"
+
+  #mysql account/databse for application
+  myapp:
+    db:
+      host: "owly.db.local"
+      name: "{{ dbname }}"
+      user: "{{ dbuser }}"
+      pass: "{{ dbpass }}"
+
+    #web
+    web:
+      name: "owly"
+      pkgurl: "http://wordpress.org/latest.tar.gz"

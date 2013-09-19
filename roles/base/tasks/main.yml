@@ -1,0 +1,23 @@
+---
+#tasks
+
+- name: Update apt-get
+  apt: update_cache=yes
+  sudo: yes
+
+- name: Upgrade apt-get
+  apt: upgrade=yes
+  sudo: yes
+
+- apt: pkg={{item}} state=present update_cache=yes install_recommends=yes
+  sudo: yes
+  with_items:
+    - lsof
+    - unzip
+    - python-pip
+    - htop
+    - dstat
+    - iotop
+    - nethogs
+    - tree
+    - iptraf

@@ -1,0 +1,54 @@
+---
+
+
+- name: "Create security group for the hosts"
+  local_action:
+    module: ec2_group
+    name:   "{{ role }}-hosts"
+    description: "sg for ansible {{ role }} role"
+    vpc_id: "{{ ec2['vpc_id'] }}"
+    region: "{{ ec2['region'] }}"
+    ec2_access_key: "{{ aws_access_key }}"
+    ec2_secret_key: "{{ aws_secret_key }}"
+    rules:
+      - proto: "tcp"
+        to_port: 22
+        from_port: 22
+        cidr_ip: "0.0.0.0/0"
+      - proto: "tcp"
+        to_port: 80
+        from_port: 80
+        cidr_ip: "0.0.0.0/0"
+  when: role == "web"
+
+- name: "Create security group for the hosts"
+  local_action:
+    module: ec2_group
+    name:   "{{ role }}-hosts"
+    description: "sg for ansible {{ role }}-hosts"
+    vpc_id: "{{ ec2['vpc_id'] }}"
+    region: "{{ ec2['region'] }}"
+    ec2_access_key: "{{ aws_access_key }}"
+    ec2_secret_key: "{{ aws_secret_key }}"
+    rules:
+      - proto: "tcp"
+        to_port: 22
+        from_port: 22
+        cidr_ip: "0.0.0.0/0"
+  when: role == "db"
+
+- name: "Create security group for elb for web hosts"
+  local_action:
+    module: ec2_group
+    name:   "{{ role }}-lb"
+    description: "sg for ansible {{ role }}-lb"
+    vpc_id: "{{ ec2['vpc_id'] }}"
+    region: "{{ ec2['region'] }}"
+    ec2_access_key: "{{ aws_access_key }}"
+    ec2_secret_key: "{{ aws_secret_key }}"
+    rules:
+      - proto: "tcp"
+        to_port: 80
+        from_port: 80
+        cidr_ip: "0.0.0.0/0"
+  when: role == "web"

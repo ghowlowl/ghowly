@@ -1,0 +1,13 @@
+[vm]
+f19.local
+
+[master]
+127.0.0.1
+
+[db]
+g9
+
+[web]
+bgl-wwdl-001.cisco.com
+f19.local
+

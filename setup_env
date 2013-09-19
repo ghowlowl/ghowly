@@ -1,0 +1,4 @@
+export ANSIBLE_PYTHON_INTERPRETER=/Users/gautsing/gautam/bin/python
+export ANSIBLE_HOSTS=/Users/gautsing/gautam/ansible/inventory/ec2.py
+export AWS_CONFIG_FILE=/Users/gautsing/gautam/ansible/aws.config
+export AWS_DEFAULT_REGION=us-west-1

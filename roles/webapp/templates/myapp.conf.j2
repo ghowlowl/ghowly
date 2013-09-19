@@ -1,0 +1,41 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@{{ name }}
+
+    DocumentRoot /var/{{ name }}/www/htdocs
+    <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+    </Directory>
+    <Directory /var/{{ name }}/www/htdocs>
+        Options Indexes FolowSymLinks MultiViews
+        AllowOverride all
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ScriptAlias /cgi-bin/ /var/{{ name }}/www/cgi-bin
+    <Directory "/var/{{ name }}/www/cgi-bin">
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/{{ name }}_error.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel debug
+
+    CustomLog ${APACHE_LOG_DIR}/{{ name }}access.log combined
+
+    Alias /server/ "/var/{{ name }}/www/server/""
+    <Directory "/var/{{ name }}/www/server/">
+        Options Indexes MultiViews FollowSymLinks
+        AllowOverride None
+        Order deny,allow
+        Deny from all
+        Allow from 127.0.0.0/255.0.0.0 ::1/128 10.0.0.0/255.0.0.0 192.168.0.0/255.255.0.0 172.16.0.0/255.240.0.0
+    </Directory>
+
+</VirtualHost>
