@@ -5,6 +5,24 @@
 
 #Change these variable to where all files will go
 #default install is under your homedir ~/gautam.92409234 etc
+
+ESC_SEQ="\x1b["
+COL_RESET=$ESC_SEQ"39;49;00m"
+COL_RED=$ESC_SEQ"31;01m"
+COL_GREEN=$ESC_SEQ"32;01m"
+COL_YELLOW=$ESC_SEQ"33;01m"
+COL_BLUE=$ESC_SEQ"34;01m"
+COL_MAGENTA=$ESC_SEQ"35;01m"
+COL_CYAN=$ESC_SEQ"36;01m"
+
+red(){ echo -e "${COL_RED}$@${COL_RESET}";}
+green(){ echo -e "${COL_GREEN}$@${COL_RESET}";}
+yellow(){ echo -e "${COL_YELLOW}$@${COL_RESET}";}
+blue(){ echo -e "${COL_BLUE}$@${COL_RESET}";}
+magenta(){ echo -e "${COL_MAGENTA}$@${COL_RESET}";}
+cyan(){ echo -e "${COL_CYAN}$@${COL_RESET}";}
+
+
 HOOT_NEST=~/gautam.$(date +%s)
 HOOT_EGG_URL=https://github.com/ghowlowl/ghowly.git
 
@@ -74,7 +92,7 @@ done
 echo "Setting up two webservers..."
 read -p "Press key  to continue... " -n1 -s
 
-ansible-playbook -vvv -i inventory/local.hosts initial.ec2.yaml \
+ansible-playbook -vvv -i inventory/local.hosts init.yml \
                 --extra-vars "host_env=dev host_count=2 host_role=web"
 
 
@@ -82,7 +100,7 @@ ansible-playbook -vvv -i inventory/local.hosts initial.ec2.yaml \
 echo "Setting up one database ..."
 read -p "Press key  to continue... " -n1 -s
 
-ansible-playbook -vvv -i inventory/local.hosts initial.ec2.yaml \
+ansible-playbook -vvv -i inventory/local.hosts init.yml \
                 --extra-vars "host_env=dev host_count=1 host_role=db"
 
 ##
