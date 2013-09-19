@@ -391,7 +391,7 @@ except Exception, e:
     print "Stack data parsing failed", e
 
 ###############################################################################
-# ssh
+# sg
 ###############################################################################
 
 sg_fetch = Command(
@@ -400,7 +400,7 @@ sg_fetch = Command(
 _, sg_out = sg_fetch.run()
 
 if sg_out and re.match('.*sg-.*', sg_out):
-    vars['sg_id'] = sg_out
+    vars['sg_id'] = sg_out.strip()
 else:
     print "Exception parsing Security group"
     sys.exit(1)
