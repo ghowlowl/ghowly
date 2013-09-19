@@ -33,7 +33,7 @@ AWS_SECRET_ACCESS_KEY=ddd
 
 # --- work begins here ---
 export HOOT_NEST
-echo "Making nest directory where all owl eggs (ansible playbooks) will go"
+green "Making nest directory where all owl eggs (ansible playbooks) will go"
 mkdir $HOOT_NEST
 virtualenv $HOOT_NEST
 cd $HOOT_NEST && . bin/activate
@@ -43,7 +43,7 @@ cd $HOOT_NEST && . bin/activate
     mkdir tmp && cd tmp
     wget https://github.com/ansible/ansible/archive/v1.3.1.zip
     pip install v1.3.1.zip
-    echo "Installed ansible!"
+    green "Installed ansible!"
 )
 
 
@@ -51,14 +51,14 @@ cd $HOOT_NEST && . bin/activate
 (
     pip install boto
     pip install awscli
-    echo "Installed aws related stuff (boto, awscli)"
+    green "Installed aws related stuff (boto, awscli)"
 )
 
 #is this really needed ahemm
 (
     pip install MySQL-python
     pip install termcolor
-    echo "Installed mysql-python & termcolor too ;-)"
+    green "Installed mysql-python & termcolor too ;-)"
 )
 
 #download playbooks
@@ -78,18 +78,22 @@ echo export ANSIBLE_PYTHON_INTERPRETER=$(which python) >> $setup_env
 echo export ANSIBLE_HOSTS=${HOOT_NEST}/ansible/inventory/ec2.py >> $setup_env
 echo export AWS_CONFIG_FILE=${HOOT_NEST}/ansible/aws/aws.config >> $setup_env
 
+green "sourcing $setup_env file..."
 . $setup_env
 
+green "executing setup.py file..."
 python ./setup.py
 
+clear
 #add sshagent keypair
 eval `ssh-agent`
 for f in $(ls keys); do
-    echo adding $f && chmod 0600 keys/$f && ssh-add keys/$f;
+    green adding $f to ssh-agent && chmod 0600 keys/$f && ssh-add keys/$f;
 done
 
 ##
-echo "Setting up two webservers..."
+clear
+green "Setting up two webservers..."
 read -p "Press key  to continue... " -n1 -s
 
 ansible-playbook -vvv -i inventory/local.hosts init.yml \
@@ -97,30 +101,37 @@ ansible-playbook -vvv -i inventory/local.hosts init.yml \
 
 
 ##
-echo "Setting up one database ..."
+clear
+green "Setting up one database ..."
 read -p "Press key  to continue... " -n1 -s
 
 ansible-playbook -vvv -i inventory/local.hosts init.yml \
                 --extra-vars "host_env=dev host_count=1 host_role=db"
 
 ##
-echo "Cleaning ec2.py cache..."
+clear
+green "Cleaning ec2.py cache..."
 read -p "Press key  to continue... " -n1 -s
 
 inventory/ec2.py --refresh-cache --list
 
 
 ##
-echo "Install OS and stuff"
+clear
+green "Install OS and stuff"
 read -p "Press key  to continue... " -n1 -s
 
 ansible-playbook -vvv -i inventory/ecs.py site.xml
 
 
 ##
-echo "Install app and db"
+clear
+green "Install app and db"
 read -p "Press key  to continue... " -n1 -s
 
 ansible-playbook -vvv -i inventory/ecs.py app.xml
+
+clear
+green "All done, test using loadbalancer/inctance ip"
 
 
