@@ -33,7 +33,7 @@
 #   - install web/db packages and app
 #       # run ansible app.yml playbook
 
-
+## Change below 2 vars if you want
 
 HOOT_NEST=~/gautam.$(date +%s)
 HOOT_EGG_URL=https://github.com/ghowlowl/ghowly.git
