@@ -35,10 +35,17 @@
 
 ## Change below 2 vars if you want
 
-HOOT_NEST=~/gautam.$(date +%s)
-HOOT_EGG_URL=https://github.com/ghowlowl/ghowly.git
-HOOT_BRANCH="blaypook"
+[[ HOOT_NEST ]] && [[ -d $HOOT_NEST ]] && {
 
+    echo "Hey! Looks like you got HOOT_NEST already setup, using $HOOT_NEST"
+    SKIP_INSTALL=1
+} || {
+
+    HOOT_NEST=~/gautam.$(date +%s)
+    HOOT_EGG_URL=https://github.com/ghowlowl/ghowly.git
+    HOOT_BRANCH="blaypook"
+    SKIP_INSTALL=0
+}
 
 ## -- code --
 ESC_SEQ="\x1b["
@@ -88,64 +95,66 @@ is() {
 # --- work begins here ---
 export HOOT_NEST
 
+[[ ${SKIP_INSTALL} == 1 ]] || {
 
-##
-MSG="Making nest directory where all owl eggs (ansible playbooks) will go"
-ERR="Making nest directory where all owl eggs (ansible playbooks) will go"
-is $MSG && \
-(
-    yell
-    mkdir $HOOT_NEST && virtualenv $HOOT_NEST
-) || si $ERR
-
-
-##
-MSG="Activating virtualenv"
-ERR="Failed activating virutalen"
-is $MSG && yell && cd $HOOT_NEST && . bin/activate || si $ERR
+    ##
+    MSG="Making nest directory where all owl eggs (ansible playbooks) will go"
+    ERR="Making nest directory where all owl eggs (ansible playbooks) will go"
+    is $MSG && \
+    (
+        yell
+        mkdir $HOOT_NEST && virtualenv $HOOT_NEST
+    ) || si $ERR
 
 
-##
-MSG="Making nest directory where all owl eggs (ansible playbooks) will go"
-ERR="Failed activating virutalen"
-is $MSG && \
-(
-    yell
-    mkdir tmp \
-    && cd tmp \
-    && wget https://github.com/ansible/ansible/archive/v1.3.1.zip  \
-    && pip install v1.3.1.zip
-) || si $ERR
+    ##
+    MSG="Activating virtualenv"
+    ERR="Failed activating virutalen"
+    is $MSG && yell && cd $HOOT_NEST && . bin/activate || si $ERR
 
 
-##
-MSG="Installing boto, awscli, mysql-python, termcolor"
-ERR="Failed pip installs.."
-is $MSG && \
-(
-    yell
-    pip install boto \
-    && pip install awscli \
-    && pip install MySQL-python \
-    && pip install termcolor
-) || si $ERR
+    ##
+    MSG="Making nest directory where all owl eggs (ansible playbooks) will go"
+    ERR="Failed activating virutalen"
+    is $MSG && \
+    (
+        yell
+        mkdir tmp \
+        && cd tmp \
+        && wget https://github.com/ansible/ansible/archive/v1.3.1.zip  \
+        && pip install v1.3.1.zip
+    ) || si $ERR
 
 
-#download playbooks
-MSG="Git clone $HOOT_EGG_URL"
-ERR="Failied cloning repos! OMG!"
-is $MSG && \
-(
-    yell
-    cd $HOOT_NEST/tmp \
-    && (
-        [[ $HOOT_BRANCH ]] && git clone -b $HOOT_BRANCH $HOOT_EGG_URL \
-        || git clone $HOOT_EGG_URL
-        ) \
-    && mv ghowly* ../ansible \
-    && cd ../ansible \
-) || si $ERR
+    ##
+    MSG="Installing boto, awscli, mysql-python, termcolor"
+    ERR="Failed pip installs.."
+    is $MSG && \
+    (
+        yell
+        pip install boto \
+        && pip install awscli \
+        && pip install MySQL-python \
+        && pip install termcolor
+    ) || si $ERR
 
+
+    #download playbooks
+    MSG="Git clone $HOOT_EGG_URL"
+    ERR="Failied cloning repos! OMG!"
+    is $MSG && \
+    (
+        yell
+        cd $HOOT_NEST/tmp \
+        && (
+            [[ $HOOT_BRANCH ]] && git clone -b $HOOT_BRANCH $HOOT_EGG_URL \
+            || git clone $HOOT_EGG_URL
+            ) \
+        && mv ghowly* ../ansible \
+        && cd ../ansible \
+    ) || si $ERR
+
+}
 
 #create a setup_env file should be souced for ansible stuff
 setup_env=${HOOT_NEST}/ansible/setup_env && export setup_env
