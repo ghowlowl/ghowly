@@ -37,6 +37,7 @@
 
 HOOT_NEST=~/gautam.$(date +%s)
 HOOT_EGG_URL=https://github.com/ghowlowl/ghowly.git
+HOOT_BRANCH="blaypook"
 
 
 ## -- code --
@@ -136,7 +137,10 @@ is $MSG && \
 (
     yell
     cd $HOOT_NEST/tmp \
-    && git clone $HOOT_EGG_URL \
+    && (
+        [[ $HOOT_BRANCH ]] && git clone -b $HOOT_BRANCH $HOOT_EGG_URL \
+        || git clone $HOOT_EGG_URL
+        ) \
     && mv ghowly* ../ansible \
     && cd ../ansible \
 ) || si $ERR
