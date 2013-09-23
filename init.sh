@@ -194,50 +194,8 @@ is "starting ssh-agent..." && {
 
 
 ##
-is && {
-
+is && [[ -e $HOOT_NEST/ansible/playbok_runner.sh ]]  {
+    green "Executing playbook_runner.sh"
+    . $HOOT_NEST/ansible/playbok_runner.sh
     clear
-    green  "Automated install using ansible.. you can sit back and relax now.."
-    green  " you can go and drink some latte/cappucino/mocha or ipa/stout/lager.."
-    read -p "Press key to continue... " -n1 -s
-
-    clear
-    green "Setting up 2 webservers..."
-    #read -p "Press key to continue... " -n1 -s
-    ansible-playbook -vvv -i inventory/local.hosts init.yml \
-                    --extra-vars "host_env=dev host_count=2 host_role=web"
-
-
-    ##
-    clear
-    green "Setting up 1 database ..."
-    #read -p "Press key to continue... " -n1 -s
-    ansible-playbook -vvv -i inventory/local.hosts init.yml \
-                    --extra-vars "host_env=dev host_count=1 host_role=db"
-
-    ##
-    clear
-    #green "Clean ec2.py cache..."
-    read -p "Press key to continue... " -n1 -s
-    inventory/ec2.py --refresh-cache --list
-
-
-    ##
-    clear
-    green "Install OS and stuff"
-    #read -p "Press key to continue... " -n1 -s
-    ansible-playbook -vvv site.yml
-
-
-    ##
-    clear
-    green "Install app and db"
-    #read -p "Press key to continue... " -n1 -s
-    ansible-playbook -vvv app.yml
-
-    clear
-    green "All done, test using loadbalancer/inctance ip"
-
-} || {
-    echo "Blame Canda!"
 }

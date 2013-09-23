@@ -540,6 +540,12 @@ files = [
             nest=nest),
         'src': 'local.hosts.j2'
     },
+    {
+        'dst': '{nest}/ansible/playbook_runner.sh'.format(
+            nest=nest),
+        'src': 'playbook_runner.sh.j2'
+    },
+
 ]
 
 for pair in files:
@@ -567,4 +573,5 @@ mypage(
             env=env
             )
         )
+
 print("bye")

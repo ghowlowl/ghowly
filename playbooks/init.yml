@@ -41,7 +41,7 @@
     - include: ../tasks/ec2.yml count={{host_count}} role={{host_role}} env={{host_env}}
 
     - name: post-task cache refresh
-      local_action: shell ./inventory/ec2.py --refresh-cache
+      local_action: shell ../inventory/ec2.py --refresh-cache
 
 
 
