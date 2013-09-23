@@ -1,3 +1,4 @@
+##### Latest refactored playbooks code is at wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh
 
 LAMP on multi EC2 instance inside VPC
 ================================================================
@@ -5,12 +6,17 @@ LAMP on multi EC2 instance inside VPC
 
 To test:
 --------------------
-    - cd /tmp/
-    - wget https://raw.github.com/ghowlowl/ghowly/master/init.sh
-    - . init.sh
-      # init.sh should do the rest and create a python virtual env
-      # in your homedir  ~/gautam.*/
-      # I wrote this on Mac OS X, bash and python 2.7...
+    1. cd /tmp/
+    2. Download init.sh from either URLs
+        - #stable
+            - wget https://raw.github.com/ghowlowl/ghowly/master/init.sh
+        - #beta
+            - wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh
+    3. source init.sh
+        - . init.sh
+        # init.sh should do the rest and create a python virtual env
+        # in your homedir  ~/gautam.*/
+        # I wrote this on Mac OS X, bash and python 2.7...
 
 
 Let me explain first.
