@@ -1,4 +1,4 @@
-##### Latest refactored playbooks code is at wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh
+#### Recommend using the latest refactored code use 'wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh'
 
 LAMP on multi EC2 instance inside VPC
 ================================================================
