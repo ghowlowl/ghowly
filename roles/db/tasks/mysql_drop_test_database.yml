@@ -1,0 +1,4 @@
+- name: Remove test database
+  mysql_db: name=test state=absent
+  sudo: yes
+

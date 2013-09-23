@@ -1,0 +1,5 @@
+- name: Add entries in /etc/hosts
+  lineinfile: |
+      dest=/etc/hosts state=present regexp='^.* owly.db.local*$' line="{{ dbhost }} {{ host }}" backup=yes
+  sudo: yes
+

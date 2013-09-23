@@ -1,0 +1,5 @@
+- name: Change bind configs
+  copy: src=bind.cnf dest=/etc/mysql/conf.d/bind.cnf owner=root group=root mode=644 backup=no
+  sudo: yes
+  notify: restart mysql
+

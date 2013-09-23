@@ -59,16 +59,16 @@ magenta(){ echo -e "${COL_MAGENTA}$@${COL_RESET}";}
 cyan(){ echo -e "${COL_CYAN}$@${COL_RESET}";}
 
 ## -- code --
-
-si () {
+yell() { echo -e "${COL_RESET}${COL_YELLOW}";}
+si() {
     is "bad" $@
 }
 
-is () {
+is() {
     local _now=$(date +%Y-%m-%d\ %H:%M:%S)
     local _is=$1
     shift
-    echo $COL_RESET
+    echo -e $COL_RESET
     if [[ "${_is}" == "good" ]]; then
         _ANY_ERROR="NO"
         [[ $# > 0 ]] && green $now $@ || green $now "All good"
@@ -78,8 +78,9 @@ is () {
         [[ $# > 0 ]] && red $now $@ || red $now "did something break somewhere?"
         return 1
     else
-        [[ ${_ANY_ERROR} == "NO"]] && green $now ${_is:-"All ok, continuing"} $@ && return 0;
+        [[ ${_ANY_ERROR} == "NO" ]] && green $now ${_is:-"All ok, continuing"} $@ && return 0;
         red $now "ERROR:" ${_is:-""} $@ && return 1;
+    fi
 }
 
 
@@ -101,7 +102,7 @@ is $MSG && \
 ##
 MSG="Activating virtualenv"
 ERR="Failed activating virutalen"
-is $MSG && set_yellow && cd $HOOT_NEST && . bin/activate || si $ERR
+is $MSG && yell && cd $HOOT_NEST && . bin/activate || si $ERR
 
 
 ##
@@ -147,13 +148,15 @@ is $MSG && \
 
 
 #create a setup_env file should be souced for ansible stuff
-MSG="Creating setup_env file with ANSIBLE's env vars, (it should be srced)"
-ERR="An epic fail! sum ting wong! Bail out naaawww!!!"
+setup_env=${HOOT_NEST}/ansible/setup_env && export setup_env
+MSG="Creating $setup_env file with ANSIBLE's env vars, (it should be srced)"
+ERR="An epic fail! sum ting wong! Bail out naaawww"
 is $MSG && \
 (
     yell
-    setup_env=${HOOT_NEST}/ansible/setup_env
-    echo export HOOT_NEST=$HOOT_NEST > $setup_env
+    set +o noclobber
+    echo ". $HOOT_NEST/bin/activate" > $setup_env
+    echo export HOOT_NEST=$HOOT_NEST >> $setup_env
     echo export ANSIBLE_PYTHON_INTERPRETER=$(which python) >> $setup_env
     echo export ANSIBLE_HOSTS=${HOOT_NEST}/ansible/inventory/ec2.py >> $setup_env
     echo export AWS_CONFIG_FILE=${HOOT_NEST}/ansible/aws/aws.config >> $setup_env
@@ -163,8 +166,14 @@ is $MSG && \
 clear
 is "sourcing $setup_env file..." && . $setup_env || si "Unable to src $setup_env"
 
+
 clear
-is "executing setup.py file..." && cd $HOOT_NEST/ansible && python ./setup.py || si "some error setting up using setup.py"
+is "executing setup.py file..." \
+    && cd $HOOT_NEST/ansible \
+    && (python ./setup.py) \
+    || si "some error setting up using setup.py"
+wait
+
 
 clear
 is "starting ssh-agent..." && {
@@ -173,8 +182,9 @@ is "starting ssh-agent..." && {
         green adding $f to ssh-agent && chmod 0600 keys/$f && ssh-add keys/$f;
     done
 }
-##
 
+
+##
 is && {
 
     clear
