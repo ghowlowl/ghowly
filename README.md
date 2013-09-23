@@ -6,14 +6,15 @@ LAMP on multi EC2 instance inside VPC
 
 To test:
 --------------------
-    1. cd /tmp/
+    1. Goto /tmp dir
+        - $ cd /tmp/
     2. Download init.sh from either URLs
-        - #stable
-            - wget https://raw.github.com/ghowlowl/ghowly/master/init.sh
-        - #beta
-            - wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh
+        - #original, with old bugs
+            - $ wget https://raw.github.com/ghowlowl/ghowly/master/init.sh
+        - #beta, fixes & new bugs :-)
+            - $ wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh
     3. source init.sh
-        - . init.sh
+        - $ . init.sh
         # init.sh should do the rest and create a python virtual env
         # in your homedir  ~/gautam.*/
         # I wrote this on Mac OS X, bash and python 2.7...
