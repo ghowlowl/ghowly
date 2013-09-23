@@ -194,7 +194,7 @@ is "starting ssh-agent..." && {
 
 
 ##
-is && [[ -e $HOOT_NEST/ansible/playbok_runner.sh ]]  {
+is && [[ -e $HOOT_NEST/ansible/playbok_runner.sh ]] && {
     green "Executing playbook_runner.sh"
     . $HOOT_NEST/ansible/playbok_runner.sh
     clear
