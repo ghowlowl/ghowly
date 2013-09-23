@@ -189,12 +189,14 @@ envs = ["dev", "prod"]
 
 headline = "Configure env"
 msg = """So we are going to create separate dev, prod environment and host.
-    The environments are going to be in there own VPCs"""
+    The environments are going to be in there own VPCs
+    
+    NOTE: Select "dev" for now otherwise you must create var files first!"""
 ask = """Select the env you wish to configure? [{}]""".format("|".join(envs))
 step = 1
 if not test:
     env = mypage(step=step, headline=headline, msg=msg, ask=ask)
-    while env not in envs:
+    while env not in [ "dev" ]:
         env = mypage(step=step, headline=headline, msg=msg, ask=ask, retry="{} is incorrect choice".format(env))
     mypage(headline=headline, msg="Selected '{}' env".format(env))
 
