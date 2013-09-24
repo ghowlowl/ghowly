@@ -34,6 +34,11 @@
 # some way to connect to them
 # So either have a jump off box and set up ssh proxy (good)
 # or ass elastic ips (bad)
+
+# Pause for 5 minutes to build app cache.
+- name: "Pause because ec2 is slow abt eip allocatons"
+  pause: minutes=2
+
 - name: "Allocating & attaching EIP for the instance"
   local_action: >
         shell allocation_id=$(aws ec2 allocate-address --domain vpc --output text --region {{ ec2['region'] }} | awk '{print $NF}');
@@ -60,6 +65,9 @@
 
 - include: elb.yml name="{{host_role}}-lb" role={{ host_role }}
   when: host_role == "web"
+
+- name: "Pause because elb creation is slow sometimes"
+  pause: minutes=2
 
 - name: "Add ec2 instance to elb"
   local_action:
