@@ -1,11 +1,13 @@
 ####Note:
-    - the latest code is in "blaypook branch"
-    - use 'wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh' instead,
-    - you can edit init.sh to ensure branch details are uncommented to use blaypook
+    - the latest/testing code is in "blaypook branch"
+    - run 'wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh'
+    - edit init.sh to ensure HOOT_BRANCH is uncommented and uses the blaypook branch
+
 
 LAMP on multi EC2 instance inside VPC
 ================================================================
 #### Uses 2 instances as webservers and 1 instance as database. The webservers are loadbalanced by an ELB instance. The webserver, database hosts are in there own security group - allowing greater control over security. The hosts have 64bit Ubuntu precise and Apache2 and MySQL. Go have fun!
+
 
 To test:
 --------------------
@@ -87,6 +89,7 @@ Let me explain first.
         - source setup_env file
             . $HOOT_NEST/ansible/setup_env
         - run your ansible commands/aws cli commands
+
 
 Conclusion
 --------------------
