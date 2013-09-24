@@ -1,0 +1,5 @@
+---
+
+- name: Create myapp database
+  mysql_db: name={{ name }} state=present
+  sudo: yes

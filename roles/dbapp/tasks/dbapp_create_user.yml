@@ -1,0 +1,9 @@
+---
+
+- name: Create myapp user
+  mysql_user: name={{ user }} host={{ item }} password={{ pass }} priv={{ name }}.*:ALL state=present
+  with_items:
+    - "{{ ansible_hostname }}"
+    - localhost
+    - "%"
+  sudo: yes

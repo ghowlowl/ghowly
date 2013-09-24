@@ -1,0 +1,9 @@
+---
+#tasks
+
+- apt: pkg={{item}} state=present update_cache=yes install_recommends=yes
+  sudo: yes
+  with_items:
+    - apache2
+    - apache2-utils
+  notify: restart apache

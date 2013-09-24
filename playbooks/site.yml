@@ -17,13 +17,13 @@
   user: ubuntu
   vars_files:
       #source vars/common
-    - "./vars/common.yml"
+    - "../vars/common.yml"
 
       #source vars/{dev,stage,prod}/common vars
-    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/common.yml", "./vars/misc/common.yml" ]
+    - [ "../vars/{{ ansible_local['system']['host']['env'] }}/common.yml", "../vars/misc/common.yml" ]
 
       #source {dev,stage,prod}/{db,web}/common vars
-    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/roles/web/common.yml", "./vars/{{ ansible_local['system']['host']['env'] }}/roles/misc/common.yml" ]
+    - [ "../vars/{{ ansible_local['system']['host']['env'] }}/roles/web/common.yml", "../vars/{{ ansible_local['system']['host']['env'] }}/roles/misc/common.yml" ]
   roles:
     - { role: base }
     - { role: web }
@@ -35,13 +35,13 @@
   user: ubuntu
   vars_files:
       #source vars/common
-    - "./vars/common.yml"
+    - "../vars/common.yml"
 
       #source vars/{dev,stage,prod}/common vars
-    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/common.yml", "./vars/misc/common.yml" ]
+    - [ "../vars/{{ ansible_local['system']['host']['env'] }}/common.yml", "../vars/misc/common.yml" ]
 
       #source {dev,stage,prod}/{db,web}/common vars
-    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/roles/db/common.yml", "./vars/{{ ansible_local['system']['host']['env'] }}/roles/misc/common.yml" ]
+    - [ "../vars/{{ ansible_local['system']['host']['env'] }}/roles/db/common.yml", "../vars/{{ ansible_local['system']['host']['env'] }}/roles/misc/common.yml" ]
   roles:
     - { role: base }
     - { role: db }

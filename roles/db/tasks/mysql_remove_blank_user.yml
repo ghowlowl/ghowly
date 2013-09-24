@@ -1,0 +1,7 @@
+- name: Remove blank users
+  mysql_user: name='' host={{ item }} state=absent
+  sudo: yes
+  with_items:
+    - "{{ ansible_hostname }}"
+    - localhost
+

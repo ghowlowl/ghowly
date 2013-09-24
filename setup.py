@@ -146,6 +146,7 @@ msg="""Hello!
     environemnts. And then
 
   Next steps:
+    0) Unique project-name?
     1) Which env? (dev or prod)
     2) Prefered VPC region
     3) Enter AWS credentials
@@ -154,7 +155,9 @@ msg="""Hello!
     4) Mysql configure
         4.1) db name
         4.2) db username
-        4.3) db password"""
+        4.3) db password
+
+  Note: Ubuntu Precise (64bit) is the set OS, the VPC subnet is 10.10.x.x"""
 mypage(msg=msg.format(''))
 check=1
 while check is not None:
@@ -179,6 +182,22 @@ mysql_database_pass = input('Enter the "AWS Region"? ')
 aws_access_key = input('Enter your "AWS_ACCESS_KEY_ID"? ')
 aws_secret_key = input('Enter your "AWS SECRET ACCESS KEY"? ')
 """
+
+###############################################################################
+# which env
+###############################################################################
+
+headline = "Name your project"
+msg = """Let's start off this env by giving a nice name for this project, the
+    name has to regex match /[a-z0-9]{4,10}/
+        Note: the name has to sound funny too (joking)"""
+ask = """Enter name of the project"""
+step = 0
+if not test:
+    name = mypage(step=step, headline=headline, msg=msg, ask=ask)
+    while re.match('[a-z0-9]+', name) is None:
+        name = mypage(step=step, headline=headline, msg=msg, ask=ask, retry="{} is invalid name".format(name))
+    mypage(headline=headline, msg="Selected '{}' name".format(name))
 
 
 ###############################################################################
@@ -331,21 +350,20 @@ session_id = str(int(time.time()))[-5:]
 ###############################################################################
 ###############################################################################
 
+stack_name = name + "-" + env
+
 mypage(
     headline="Starting aws cloudformation setup",
-    msg="""Going to setup:
-        - VPC
-        - Subnet
+    msg="""Create a new stack named '{}', the stack will create:
+        - a private VPC
+        - 10.10.0.0 Subnet
         - Internet Gateway
-        - Routing Table
+        - Routing Tables
         - DHCP Options
-        - VPC Security Group
-        - Gateway
-        - ACL
-    Using cloudformation template {}
-    """.format(ansible_dir + '/setup/cloudformation.template.json'))
-
-stack_name = "stack" + session_id
+        - Security Group
+        - Network ACL
+    Using cloudformation template file '{}''
+    """.format(stack_name, ansible_dir + '/setup/cloudformation.template.json'))
 
 # '''
 stack_create_cmd = 'aws cloudformation create-stack --stack-name {} --template-body file://setup/cloudformation.template.json --region {} --output text'.format(stack_name, region)
@@ -524,6 +542,12 @@ files = [
             nest=nest),
         'src': 'local.hosts.j2'
     },
+    {
+        'dst': '{nest}/ansible/playbook_runner.sh'.format(
+            nest=nest),
+        'src': 'playbook_runner.sh.j2'
+    },
+
 ]
 
 for pair in files:
@@ -551,4 +575,5 @@ mypage(
             env=env
             )
         )
+
 print("bye")

@@ -1,0 +1,7 @@
+- name: Install app
+  action: shell
+          cd /var/www/ && curl {{ apppkg }} | tar xz;
+          mv wordpress blog;
+          cd blog
+  sudo: yes
+

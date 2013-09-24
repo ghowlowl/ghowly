@@ -22,26 +22,26 @@
 
   vars_files:
       #source vars/common
-    - "./vars/common.yml"
+    - "../vars/common.yml"
       #source vars/{dev,stage,prod}/common vars
-    - [ "./vars/{{ host_env }}/common.yml",
+    - [ "../vars/{{ host_env }}/common.yml",
         "./vars/misc/common.yml" ]
         #source {dev,stage,prod}/{db,web}/common vars
-    - [ "./vars/{{ host_env }}/roles/{{ host_role }}/common.yml",
-        "./vars/{{ host_env }}/roles/misc/common.yml" ]
+    - [ "../vars/{{ host_env }}/roles/{{ host_role }}/common.yml",
+        "../vars/{{ host_env }}/roles/misc/common.yml" ]
 
   tasks:
     - name: pre-flight check
       local_action: shell echo Going to create ec2 env={{ host_env }} type={{ host_env }} role={{host_role}}
 
       #creates secruity group for the role
-    - include: tasks/ec2_sg.yml role={{host_role}}
+    - include: ../tasks/ec2_sg.yml role={{host_role}}
 
       #creates ec2 instance
-    - include: tasks/ec2.yml count={{host_count}} role={{host_role}} env={{host_env}}
+    - include: ../tasks/ec2.yml count={{host_count}} role={{host_role}} env={{host_env}}
 
     - name: post-task cache refresh
-      local_action: shell ./inventory/ec2.py --refresh-cache
+      local_action: shell ../inventory/ec2.py --refresh-cache
 
 
 

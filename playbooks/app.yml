@@ -12,13 +12,13 @@
   user: ubuntu
   vars_files:
       #source vars/common
-    - "./vars/common.yml"
+    - "../vars/common.yml"
 
       #source vars/{dev,stage,prod}/common vars
-    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/common.yml", "./vars/misc/common.yml" ]
+    - [ "../vars/{{ ansible_local['system']['host']['env'] }}/common.yml", "../vars/misc/common.yml" ]
 
       #source {dev,stage,prod}/{db,web}/common vars
-    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/roles/{{ ansible_local['system']['host']['role'] }}/common.yml", "./vars/{{ ansible_local['system']['host']['env'] }}/roles/misc/common.yml" ]
+    - [ "../vars/{{ ansible_local['system']['host']['env'] }}/roles/{{ ansible_local['system']['host']['role'] }}/common.yml", "../vars/{{ ansible_local['system']['host']['env'] }}/roles/misc/common.yml" ]
   roles:
     - { role: dbapp,
         name: "{{ data['myapp']['db']['name'] }}",
@@ -29,22 +29,22 @@
   tasks:
     - name: Add db ip to vars/*/roles/db/common.yml
       local_action: |
-          lineinfile dest=./vars/{{ ansible_local['system']['host']['env'] }}/roles/{{ ansible_local['system']['host']['role'] }}/common.yml regexp='^(.*) dbhost: (.*)$' line='\1 dbhost: {{ ansible_default_ipv4['address'] }}' backrefs=yes backup=yes
+          lineinfile dest=../vars/{{ ansible_local['system']['host']['env'] }}/roles/{{ ansible_local['system']['host']['role'] }}/common.yml regexp='^(.*) dbhost: (.*)$' line='\1 dbhost: {{ ansible_default_ipv4['address'] }}' backrefs=yes backup=yes
     - name: Add db ip to vars/*/roles/db/common.yml
       local_action: |
-          lineinfile dest=./vars/{{ ansible_local['system']['host']['env'] }}/roles/web/common.yml regexp='^(.*) dbhost: (.*)$' line='\1 dbhost: {{ ansible_default_ipv4['address'] }}' backrefs=yes backup=yes
+          lineinfile dest=../vars/{{ ansible_local['system']['host']['env'] }}/roles/web/common.yml regexp='^(.*) dbhost: (.*)$' line='\1 dbhost: {{ ansible_default_ipv4['address'] }}' backrefs=yes backup=yes
 
 - hosts: tag_*_web
   user: ubuntu
   vars_files:
       #source vars/common
-    - "./vars/common.yml"
+    - "../vars/common.yml"
 
       #source vars/{dev,stage,prod}/common vars
-    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/common.yml", "./vars/misc/common.yml" ]
+    - [ "../vars/{{ ansible_local['system']['host']['env'] }}/common.yml", "../vars/misc/common.yml" ]
 
       #source {dev,stage,prod}/{db,web}/common vars
-    - [ "./vars/{{ ansible_local['system']['host']['env'] }}/roles/{{ ansible_local['system']['host']['role'] }}/common.yml", "./vars/{{ ansible_local['system']['host']['env'] }}/roles/misc/common.yml" ]
+    - [ "../vars/{{ ansible_local['system']['host']['env'] }}/roles/{{ ansible_local['system']['host']['role'] }}/common.yml", "../vars/{{ ansible_local['system']['host']['env'] }}/roles/misc/common.yml" ]
   roles:
     - { role: webapp,
         name: "{{ data['myapp']['db']['name'] }}",
