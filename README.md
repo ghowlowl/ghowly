@@ -1,7 +1,4 @@
-####Note:
-    - the latest/testing code is in "blaypook branch"
-    - run 'wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh'
-    - edit init.sh to ensure HOOT_BRANCH is uncommented and uses the blaypook branch
+
 
 
 LAMP on multi EC2 instance inside VPC
@@ -14,10 +11,8 @@ To test:
     1. Goto /tmp dir
         - $ cd /tmp/
     2. Download init.sh from either URLs
-        - #original, with old bugs
+        - #master branch
             - $ wget https://raw.github.com/ghowlowl/ghowly/master/init.sh
-        - #beta, fixes & new bugs :-)
-            - $ wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh
     3. source init.sh
         - $ . init.sh
         # init.sh should do the rest and create a python virtual env
@@ -95,3 +90,8 @@ Conclusion
 --------------------
 I know it could be a lot simpler by just doing everything with cloudformation, but I used that at minimum. I started off using trying everything with ansible, then used aws cli where it was not possible. And realised creating private VPC was complicated with too many resources so I ended up using cloudformation. Anyways learnt a great deal!!
 
+Beta branch
+--------------------
+    - the latest/testing code is in "blaypook branch"
+    - run 'wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh'
+    - edit init.sh to ensure HOOT_BRANCH is uncommented and uses the blaypook branch
