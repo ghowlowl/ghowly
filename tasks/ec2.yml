@@ -37,7 +37,7 @@
 
 # Pause for 5 minutes to build app cache.
 - name: "Pause because ec2 is slow abt eip allocatons"
-  pause: minutes=2
+  pause: minutes=1
 
 - name: "Allocating & attaching EIP for the instance"
   local_action: >
@@ -67,7 +67,7 @@
   when: host_role == "web"
 
 - name: "Pause because elb creation is slow sometimes"
-  pause: minutes=2
+  pause: minutes=1
 
 - name: "Add ec2 instance to elb"
   local_action:
