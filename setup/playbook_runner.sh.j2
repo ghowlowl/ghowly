@@ -72,17 +72,12 @@ cd $HOOT_NEST/ansible && \
     read -p "Press key to continue... " -n1 -s
 
     yellow "executing:
-    curl $lburl \
-        | grep -i \"request fullfilled by:\" \
-        | sed -e \'s/.*> \([a-z0-9-]*\) <.*\$/HTTP response from instance: \1/\'
+    curl $lburl | grep -i \"request fullfilled by:\" | sed -e \'s/.*> \([a-z0-9-]*\) <.*\$/HTTP response from instance: \1/\'
     "
     for i in $(seq 1 10)
     do
         response=$( curl -qs $lburl | grep -i "request fullfilled by:" | sed -e 's/.*> \([a-z0-9-]*\) <.*$/HTTP response from instance: \1/')
         yellow testing $i: ${response:-failed}
     done
-    curl -qs $lburl | grep -i "request fullfilled by:" | sed -e 's/.*> \([a-z0-9-]*\) <.*$/HTTP response from instance: \1/'
-    curl -qs $lburl | grep -i "request fullfilled by:" | sed -e 's/.*> \([a-z0-9-]*\) <.*$/HTTP response from instance: \1/'
-    curl -qs $lburl | grep -i "request fullfilled by:" | sed -e 's/.*> \([a-z0-9-]*\) <.*$/HTTP response from instance: \1/'
 
 } || red "Error unable to run playbook wrapper, have u HOOT_NEST variable correctly?"
