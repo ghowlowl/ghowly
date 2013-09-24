@@ -1,0 +1,13 @@
+---
+- apt: pkg={{item}} state=present install_recommends=yes
+  sudo: yes
+  with_items:
+    - lsof
+    - unzip
+    - python-pip
+    - htop
+    - dstat
+    - iotop
+    - nethogs
+    - tree
+    - iptraf

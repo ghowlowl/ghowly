@@ -1,0 +1,4 @@
+---
+- name: Upgrade apt-get
+  apt: upgrade=yes update_cache=yes
+  sudo: yes

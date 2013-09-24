@@ -1,4 +1,4 @@
-- apt: pkg={{item}} state=present update_cache=yes install_recommends=yes
+- apt: pkg={{item}} state=present install_recommends=yes
   sudo: yes
   with_items:
     - mysql-client

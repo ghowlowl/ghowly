@@ -37,7 +37,7 @@ cd $HOOT_NEST/ansible && \
     ##
     clear
     green "Setting up 1 database ..."
-    read -p "Press key to continue... " -n1 -s
+    #read -p "Press key to continue... " -n1 -s
     ansible-playbook -vvv -i inventory/local.hosts ./playbooks/init.yml \
                     --extra-vars "host_env=$run_env host_count=1 host_role=db"
     sleep 30
@@ -45,7 +45,7 @@ cd $HOOT_NEST/ansible && \
     ##
     clear
     green "Clean ec2.py cache..."
-    read -p "Press key to continue... " -n1 -s
+    #read -p "Press key to continue... " -n1 -s
     inventory/ec2.py --refresh-cache --list
     sleep 30
 
@@ -53,15 +53,15 @@ cd $HOOT_NEST/ansible && \
     ##
     clear
     green "Install OS and stuff"
-    read -p "Press key to continue... " -n1 -s
-    ansible-playbook -vvv playbooks/site.yml
+    #read -p "Press key to continue... " -n1 -s
+    yellow "processing..." && ansible-playbook -vvv playbooks/site.yml
     sleep 30
 
 
     ##
     clear
     green "Install app and db"
-    read -p "Press key to continue... " -n1 -s
+    #read -p "Press key to continue... " -n1 -s
     ansible-playbook -vvv playbooks/app.yml
     sleep 30
 
@@ -69,6 +69,20 @@ cd $HOOT_NEST/ansible && \
     green "All done, test using loadbalancer/inctance ip"
     lburl=$(aws elb describe-load-balancers --load-balancer-names web-lb --output text  | awk '/web-lb/ && /amazonaws.com/ {print $2}')
     green "Try opening the link http://$lburl"
+    read -p "Press key to continue... " -n1 -s
 
+    yellow "executing:
+    curl $lburl \
+        | grep -i \"request fullfilled by:\" \
+        | sed -e \'s/.*> \([a-z0-9-]*\) <.*\$/HTTP response from instance: \1/\'
+    "
+    for i in $(seq 1 10)
+    do
+        response=$( curl -qs $lburl | grep -i "request fullfilled by:" | sed -e 's/.*> \([a-z0-9-]*\) <.*$/HTTP response from instance: \1/')
+        yellow testing $i: ${response:-failed}
+    done
+    curl -qs $lburl | grep -i "request fullfilled by:" | sed -e 's/.*> \([a-z0-9-]*\) <.*$/HTTP response from instance: \1/'
+    curl -qs $lburl | grep -i "request fullfilled by:" | sed -e 's/.*> \([a-z0-9-]*\) <.*$/HTTP response from instance: \1/'
+    curl -qs $lburl | grep -i "request fullfilled by:" | sed -e 's/.*> \([a-z0-9-]*\) <.*$/HTTP response from instance: \1/'
 
 } || red "Error unable to run playbook wrapper, have u HOOT_NEST variable correctly?"
