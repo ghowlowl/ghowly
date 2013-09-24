@@ -43,7 +43,7 @@
 
     HOOT_NEST=~/gautam.$(date +%s)
     HOOT_EGG_URL=https://github.com/ghowlowl/ghowly.git
-    HOOT_BRANCH="blaypook"
+    #HOOT_BRANCH="blaypook"
     SKIP_INSTALL=0
 }
 
@@ -194,7 +194,7 @@ is "starting ssh-agent..." && {
 
 
 ##
-is && [[ -e $HOOT_NEST/ansible/playbok_runner.sh ]] && {
+is && [[ -e $HOOT_NEST/ansible/playbook_runner.sh ]] && {
     green "Executing playbook_runner.sh"
     . $HOOT_NEST/ansible/playbook_runner.sh
 }

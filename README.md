@@ -1,4 +1,7 @@
-#### Recommend using the latest refactored code use 'wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh'
+####Note:
+    - the latest code is in "blaypook branch"
+    - use 'wget https://raw.github.com/ghowlowl/ghowly/blaypook/init.sh' instead,
+    - you can edit init.sh to ensure branch details are uncommented to use blaypook
 
 LAMP on multi EC2 instance inside VPC
 ================================================================
