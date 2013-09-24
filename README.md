@@ -47,38 +47,46 @@ Let me explain first.
         - Read resource id variables to ansible var yml files using jinja
         - AWS CLI: generate keypair and add download it.
 
-    3. init.yml - when VPC is ready, we fire up ansible to do initial setup for
-        - creating EC2 instances
-        - assign role tags "db" or "web" and "dev" or "prod"
-        - create Elastic IPs for each
-        - create security group depending on role
-            - add ingress/egress traffic rules
-            - enable 80/22 port
-        - if web creating ELB, add listners
-        ansible- refresh ./ec2.py inventory cache
+    3. An ansible playbook_runner.sh is created by step 2, it basically
+       executes ansiblle playbooks in following order:
 
-    4. site.xml -
-        - installs base packages
-        - assign roles:
-            - install db packages
-            - install httpd php packages
+        3.1 init.yml - when VPC is ready, we fire up ansible to do initial setup for
+            - creating EC2 instances
+            - assign role tags "db" or "web" and "dev" or "prod"
+            - create Elastic IPs for each
+            - create security group depending on role
+                - add ingress/egress traffic rules
+                - enable 80/22 port
+            - if web creating ELB, add listners
+            ansible- refresh ./ec2.py inventory cache
 
-    5. app.xml - deploy apps and add mysql account for the apps
-        - Web app
-            - add own index.php remove index.html
-            - downloads wordpress/latest.tar.gz
-            - installs it in /var/www
-            - adds db pvt ip to /etc/hosts
-            - adds mysql db account details into php-config
-        - DB app
-            - creates app specific database
-            - creates app user acct and grants priv
-            - modifies /etc/mysql/conf.d to enable listen on 0.0.0.0
-            - restart mysql service
+        3.2 site.xml -
+            - installs base packages
+            - assign roles:
+                - install db packages
+                - install httpd php packages
 
-    6. To test hit the loadbalancers ip, you will see index.php
-       go to loadbalancer.ip.amazon/blog/ it will launch wordpress blog
-       so we are all good.
+        3.3 app.xml - deploy apps and add mysql account for the apps
+            - Web app
+                - add own index.php remove index.html
+                - downloads wordpress/latest.tar.gz
+                - installs it in /var/www
+                - adds db pvt ip to /etc/hosts
+                - adds mysql db account details into php-config
+            - DB app
+                - creates app specific database
+                - creates app user acct and grants priv
+                - modifies /etc/mysql/conf.d to enable listen on 0.0.0.0
+                - restart mysql service
+
+        3.4. To test we use  loadbalancers ip, you will see index.php
+             go to http://loadbalancer.ip.amazon/blog/ it will launch
+             wordpress blog. We are all good if you see it.
+
+    4. Later if you ever wish to run ansible commands or aws cli on your own
+        - source setup_env file
+            . $HOOT_NEST/ansible/setup_env
+        - run your ansible commands/aws cli commands
 
 Conclusion
 --------------------
