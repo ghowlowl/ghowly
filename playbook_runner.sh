@@ -1,0 +1,74 @@
+#!/bin/bash
+
+
+## -- code --
+ESC_SEQ="\x1b["
+COL_RESET=$ESC_SEQ"39;49;00m"
+COL_RED=$ESC_SEQ"31;01m"
+COL_GREEN=$ESC_SEQ"32;01m"
+COL_YELLOW=$ESC_SEQ"33;01m"
+
+red(){ echo -e "${COL_RED}$@${COL_RESET}";}
+green(){ echo -e "${COL_GREEN}$@${COL_RESET}";}
+yellow(){ echo -e "${COL_YELLOW}$@${COL_RESET}";}
+
+## -- code --
+
+run_env=prod
+
+cd $HOOT_NEST/ansible && \
+{
+
+    clear
+    green  "Automated install using ansible.. you can sit back and relax now.."
+    green  "you can go and drink some latte/cappucino/mocha or ipa/stout/lager.."
+    green  ""
+    green  "Note: the process takes sometime to finish, so hold on to that Ctrl+C"
+    read -p "Press key to continue... " -n1 -s
+
+    clear
+    green "Setting up 2 webservers..."
+    #read -p "Press key to continue... " -n1 -s
+    ansible-playbook -vvv -i inventory/local.hosts ./playbooks/init.yml \
+                    --extra-vars "host_env=$run_env host_count=2 host_role=web"
+    sleep 30
+
+
+    ##
+    clear
+    green "Setting up 1 database ..."
+    read -p "Press key to continue... " -n1 -s
+    ansible-playbook -vvv -i inventory/local.hosts ./playbooks/init.yml \
+                    --extra-vars "host_env=$run_env host_count=1 host_role=db"
+    sleep 30
+
+    ##
+    clear
+    green "Clean ec2.py cache..."
+    read -p "Press key to continue... " -n1 -s
+    inventory/ec2.py --refresh-cache --list
+    sleep 30
+
+
+    ##
+    clear
+    green "Install OS and stuff"
+    read -p "Press key to continue... " -n1 -s
+    ansible-playbook -vvv playbooks/site.yml
+    sleep 30
+
+
+    ##
+    clear
+    green "Install app and db"
+    read -p "Press key to continue... " -n1 -s
+    ansible-playbook -vvv playbooks/app.yml
+    sleep 30
+
+    clear
+    green "All done, test using loadbalancer/inctance ip"
+    lburl=$(aws elb describe-load-balancers --load-balancer-names web-lb --output text  | awk '/web-lb/ && /amazonaws.com/ {print $2}')
+    green "Try opening the link http://$lburl"
+
+
+} || red "Error unable to run playbook wrapper, have u HOOT_NEST variable correctly?"
