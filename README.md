@@ -1,9 +1,9 @@
 
 
 
-LAMP on multi EC2 instance inside VPC
+LAMP on 3 ec2 instances in VPC
 ================================================================
-#### Uses 2 instances as webservers and 1 instance as database. The webservers are loadbalanced by an ELB instance. The webserver, database hosts are in there own security group - allowing greater control over security. The hosts have 64bit Ubuntu precise and Apache2 and MySQL. Go have fun!
+#### Uses 2 instances as webservers and 1 instance as database and 1 ELB. The webserver, database hosts and load-balancer are in there own security group - allowing finer security control. The hosts are 64bit Ubuntu precise and webservers use Apache2 + PHP and db is MySQL. Latest wordpress is installed. Go have fun!
 
 
 To test:
